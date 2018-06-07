@@ -27,8 +27,6 @@ class Service {
       primaryContactPhoneNo: String
     };
 
-    const nacaApiService = this.app.service('naca-api');
-
     var mobileSessionId;
 
     const option = {
@@ -36,8 +34,8 @@ class Service {
       method: 'POST',
       form: {
         data64: data.data64,
-        FingerPosition: data.fingerPosition,
-        ID: data.patientId
+        FingerPosition: data.FingerPosition,
+        ID: data.personId
       }
     };
     try {
@@ -46,6 +44,7 @@ class Service {
         return jsend.error('No data sent');
       } else {
         if (data === undefined) {
+          msg.primaryContactPhoneNo = data.from;
           msg.message = {
             isUnique: true,
             message: 'Could not save at Sidmach',
@@ -55,16 +54,10 @@ class Service {
           sms.sendPatientDetail(msg);
           return jsend.success(msg);
         } else {
-          const enrollFinger = await nacaApiService.create(data);
-          if (enrollFinger.patientId !== undefined) {
-            msg.message = {
-              isUnique: true,
-              message: enrollFinger.patientId,
-              rId: mobileSessionId
-            };
-          }
-          sms.sendPatientDetail(msg);
-          return jsend.success(msg);
+          let callback ={};
+          callback.makeRequest = makeRequest;
+          data.response = callback;
+          return jsend.success(data);
         }
 
       }

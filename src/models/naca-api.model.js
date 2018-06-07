@@ -6,13 +6,13 @@ module.exports = function (app) {
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const nacaApi = new Schema({
-    source: { type: String, required: true },
+    source: { type: String, required: false },
     route: { type: String, required: true },
     personId: { type: String, required: true },
-    fingerPosition: [
+    finger: [
       {
-        fingerPosition: { type: Number, required: true },
-        fingerTemplate: { type: String, required: true }
+        FingerPosition: { type: Number, required: true },
+        data64: { type: String, required: true }
       }
     ],
     firstName: { type: String, required: true },

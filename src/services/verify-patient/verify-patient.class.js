@@ -32,7 +32,6 @@ class Service {
     const nacaApiService = this.app.service('naca-api');
 
     var mobileSessionId;
-
     const option = {
       uri: process.env.NACA_VERIFICATION_URL,
       method: 'POST',
@@ -55,15 +54,14 @@ class Service {
       }
       else {
         const id = JSON.parse(makeRequest.toString());
-        const getPatient = await nacaApiService.find({query:{ patientId: id.ID } });
-        const detail = getPatient.data[0];
-        if (getPatient.v !== undefined) {
+        const getPerson = await nacaApiService.find({query:{ personId: id.ID } });
+        const detail = getPerson;
+        if (getPerson.v !== undefined) {
           msg.message = {
             isUnique: false,
             message: this.convertReset(detail),
             rId: mobileSessionId
           };
-
           return jsend.success(msg);
         }
 
@@ -89,28 +87,11 @@ class Service {
     this.app = app;
   }
 
-  convert(body) {
-    var res ={
-      data64: body.b,
-      patientId:Math.floor(Math.random() * 90000) + 10000,
-      fingerPosition:body.fp,
-      firstName:body.f,
-      lastName:body.l,
-      occupation:body.o,
-      address:body.a,
-      dob:body.d,
-      gender:body.g,
-      religion:body.r,
-      marital:body.m,
-      state:body.s
-    };
-    return res;
-  }
-  
   convertReset(data) {
     var res = {};
-    res.pid = data.patientId;
-    res.fp = data.fingerPosition;
+    res.pid = data.personId;
+    res.fp = data.position;
+    res.b = data.template;
     res.f = data.firstName;
     res.l = data.lastName;
     res.o = data.occupation;
@@ -120,7 +101,9 @@ class Service {
     res.r = data.religion;
     res.m = data.marital;
     res.s = data.state;
-  
+    res.z = data.source;
+    res.q = data.route;
+    
     return res;
   }
 }

@@ -4,7 +4,7 @@ const request = require('request');
 
 function sender(mesage, data, isScheduler) {
   var url = 'http://portal.bulksmsnigeria.net/api/?username=apmis&password=apmis&message=' + mesage + '&sender=APMIS&mobiles=@@' + data.primaryContactPhoneNo + '@@';
-  if (isScheduler == true) {
+  if (isScheduler == true){
     url = 'http://portal.bulksmsnigeria.net/api/?username=apmis&password=apmis&message=' + mesage + '&action=scheduled' + '&sender=APMIS&mobiles=@@' + data.primaryContactPhoneNo + '@@';
   }
   request.get(url, null, (error, response, body) => {
