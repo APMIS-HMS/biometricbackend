@@ -41,7 +41,6 @@ class Service {
 
     msg.primaryContactPhoneNo = data.from;
     mobileSessionId = objectify.rId;
-
     let convertShortKeys = this.convert(objectify);
 
     let verify;
@@ -51,9 +50,10 @@ class Service {
     if (objectify.v === 1) {
 
       try {
+        convertShortKeys.from = data.from;
         verify = await verifyPatientService.create(convertShortKeys);
-        console.log(verify);
         if (verify !== undefined) {
+
           return jsend.success(verify);
         }
         
@@ -65,6 +65,7 @@ class Service {
 
     } // Enrole Patient...
     else if (objectify.v === 0) {
+      convertShortKeys.from = data.from;
       fingerTemp = Object.keys(convertShortKeys.data64).map(i => convertShortKeys.data64[i]);
       let enrol;
       try {
@@ -75,7 +76,6 @@ class Service {
           convertShortKeys.data64 = base64;
 
           enrol = await enrollmentService.create(convertShortKeys);
-
           if (enrol !== undefined) {
             msg.message[k] = enrol;
           }

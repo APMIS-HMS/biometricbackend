@@ -23,14 +23,13 @@ class Service {
   }
 
   async create(data, params) {
-
     var msg = {
       message: {},
-      primaryContactPhoneNo: String
+      primaryContactPhoneNo: data.from
     };
 
     const nacaApiService = this.app.service('naca-api');
-    var mobileSessionId;
+    var mobileSessionId = data.rId;
     const option = {
       uri: process.env.NACA_VERIFICATION_URL,
       method: 'POST',
@@ -47,21 +46,20 @@ class Service {
           message: 'Patient does not exist',
           rId: mobileSessionId
         };
-
         sms.sendPatientDetail(msg);
         return jsend.error(msg);
       }
       else {
         const id = JSON.parse(makeRequest.toString());
-        console.log('Id = : **',id);
         const getPerson = await nacaApiService.find({query:{ personId: id.ID } });
-        const detail = getPerson;
-        if (getPerson.v !== undefined) {
+        const detail = getPerson.data[0];
+        if (detail._id !== undefined) {
           msg.message = {
             isUnique: false,
             message: this.convertReset(detail),
             rId: mobileSessionId
           };
+          sms.sendPatientDetail(msg);
           return jsend.success(msg);
         }else{
           msg.message = {
@@ -69,6 +67,7 @@ class Service {
             message: 'Patient does not exist on Naca collection!',
             rId: mobileSessionId
           };
+          sms.sendPatientDetail(msg);
           return jsend.error(msg);
         }
 

@@ -28,22 +28,21 @@ class Service {
     };
 
     var mobileSessionId;
-
     const option = {
       uri: process.env.NACA_ENROLMENT_URL,
       method: 'POST',
       form: {
-        data64: data.data64,
-        FingerPosition: data.FingerPosition,
-        ID: data.personId
+        data64: data.data64.data64,
+        FingerPosition: data.data64.FingerPosition,
+        ID: data.data64.personId
       }
     };
     try {
       const makeRequest = await request(option);
-      if (makeRequest === undefined || makeRequest === 0) {
+      if (makeRequest === undefined) {
         return jsend.error('No data sent');
       } else {
-        if (data === undefined) {
+        if (makeRequest !== 0) {
           msg.primaryContactPhoneNo = data.from;
           msg.message = {
             isUnique: true,
