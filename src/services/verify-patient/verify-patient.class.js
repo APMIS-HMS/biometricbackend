@@ -30,7 +30,6 @@ class Service {
     };
 
     const nacaApiService = this.app.service('naca-api');
-
     var mobileSessionId;
     const option = {
       uri: process.env.NACA_VERIFICATION_URL,
@@ -54,6 +53,7 @@ class Service {
       }
       else {
         const id = JSON.parse(makeRequest.toString());
+        console.log('Id = : **',id);
         const getPerson = await nacaApiService.find({query:{ personId: id.ID } });
         const detail = getPerson;
         if (getPerson.v !== undefined) {
@@ -63,6 +63,13 @@ class Service {
             rId: mobileSessionId
           };
           return jsend.success(msg);
+        }else{
+          msg.message = {
+            isUnique: true,
+            message: 'Patient does not exist on Naca collection!',
+            rId: mobileSessionId
+          };
+          return jsend.error(msg);
         }
 
       }

@@ -37,7 +37,7 @@ class Service {
     let base64 = {};
     var finger = [];
     var mobileSessionId;
-    const objectify = JSON.parse(data.text.toString());
+    const objectify = JSON.parse(data.text);
 
     msg.primaryContactPhoneNo = data.from;
     mobileSessionId = objectify.rId;
@@ -52,6 +52,7 @@ class Service {
 
       try {
         verify = await verifyPatientService.create(convertShortKeys);
+        console.log(verify);
         if (verify !== undefined) {
           return jsend.success(verify);
         }
