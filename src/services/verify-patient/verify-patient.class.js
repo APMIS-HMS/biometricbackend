@@ -39,7 +39,7 @@ class Service {
     try {
       const makeRequest = await request(option);
       console.log("----------make request--------", makeRequest);
-      if (makeRequest === undefined) {
+      if (makeRequest === null) {// is null if doesn't exist
         msg.message = {
           isUnique: true,
           message: 'Patient does not exist',
