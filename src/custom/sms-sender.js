@@ -23,7 +23,7 @@ function sender(mesage, data, isScheduler) {
 
 function sendPatientDetail(data) {
   console.log("------sending sms ----------" + data);
-  const message = JSON.stringify(data); // data.message was changed
+  const message = JSON.stringify(data.message); // data.message was changed
   sender(message, data, false);
 }
 

@@ -39,7 +39,7 @@ class Service {
     try {
       const makeRequest = await request(option);
       console.log("----------make request--------", makeRequest);
-      if (makeRequest === null) {// is null if doesn't exist
+      if (JSON.parse(makeRequest).ID === null) {// parse makeRequest to get ID
         msg.message = {
           isUnique: true,
           message: 'Patient does not exist',
