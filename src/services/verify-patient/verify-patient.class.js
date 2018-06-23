@@ -36,10 +36,9 @@ class Service {
       form: { data64: data.data64 }
     };
 
-
-
     try {
       const makeRequest = await request(option);
+      console.log("----------make request--------", makeRequest);
       if (makeRequest === undefined) {
         msg.message = {
           isUnique: true,

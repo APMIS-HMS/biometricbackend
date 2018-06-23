@@ -51,6 +51,8 @@ class Service {
 
       try {
         convertShortKeys.from = data.from;
+        convertShortKeys.rId = mobileSessionId;
+        console.log("convert short keys---------", convertShortKeys);
         verify = await verifyPatientService.create(convertShortKeys);
         if (verify !== undefined) {
 
@@ -66,6 +68,8 @@ class Service {
     } // Enrole Patient...
     else if (objectify.v === 0) {
       convertShortKeys.from = data.from;
+      convertShortKeys.rId = mobileSessionId;
+      
       fingerTemp = Object.keys(convertShortKeys.data64).map(i => convertShortKeys.data64[i]);
       let enrol;
       try {
