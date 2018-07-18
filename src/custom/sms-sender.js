@@ -12,17 +12,17 @@ function sender(mesage, data, isScheduler) {
   request.get(url, null, (error, response, body) => {
     if (error) {
       // logger.error(error);
-      console.log("--------sms failed------", error);
+      console.log('--------sms failed------', error);
     }
     if (response && body) {
       // logger.error(error);
-      console.log("--------SMS SUCCESS--------", response + body);
+      console.log('--------SMS SUCCESS--------', response + body);
     }
   });
 }
 
 function sendPatientDetail(data) {
-  console.log("------sending sms ----------" + data);
+  console.log('------sending sms ----------' + data);
   const message = JSON.stringify(data.message); // data.message was changed
   sender(message, data, false);
 }

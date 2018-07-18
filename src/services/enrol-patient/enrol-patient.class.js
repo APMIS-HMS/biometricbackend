@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const request = require('request-promise');
 const jsend = require('jsend');
-const sms = require('../../custom/sms-sender');
+//const sms = require('../../custom/sms-sender');
 //const convertReset = require('../../custom/convert');
 //const console = require('console');
 
@@ -50,7 +50,7 @@ class Service {
             rId: mobileSessionId
           };
 
-          sms.sendPatientDetail(msg);
+          //sms.sendPatientDetail(msg);
           return jsend.success(msg);
         } else {
           let callback ={};
