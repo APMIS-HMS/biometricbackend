@@ -108,10 +108,11 @@ class Service {
                 savedFinger = getSavedFingers.data[0].finger;
                 fingerCount = savedFinger.length;
                 if (fingerCount === 5) {
+                  const personId = Math.floor(Math.random() * 90000) + 10000,
                   try {
                     for (var k = 0; k < fingerCount; k++) {
                       base64 = savedFinger[k];
-                      base64.personId = convertShortKeys.personId;
+                      base64.personId = personId;
                       convertShortKeys.data64 = base64;
                       //console.log('*****************Data64***********************\n', convertShortKeys);
                       enrol = await enrollmentService.create(convertShortKeys);
@@ -206,7 +207,6 @@ class Service {
   convert(body) {
     var res = {
       data64: body.fp,
-      personId: Math.floor(Math.random() * 90000) + 10000,
       firstName: body.f,
       lastName: body.l,
       occupation: body.o,

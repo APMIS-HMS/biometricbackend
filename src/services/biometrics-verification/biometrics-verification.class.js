@@ -95,7 +95,6 @@ class Service {
   convert(body) {
     var res = {
       data64: body.fp,
-      personId: Math.floor(Math.random() * 90000) + 10000,
       firstName: body.f,
       lastName: body.l,
       occupation: body.o,
