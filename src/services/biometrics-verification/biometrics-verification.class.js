@@ -66,6 +66,7 @@ class Service {
 
       } // Enrole Patient...
       else if (objectify.v === 0) {
+        console.log('================hhhhhhhhhhhhhhhh==================');
         getIntercept = await interceptVerificationService.create(data);
         return jsend.success(getIntercept);
       } else {
