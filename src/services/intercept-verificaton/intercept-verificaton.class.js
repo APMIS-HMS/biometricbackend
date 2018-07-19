@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const jsend = require('jsend');
+const sms = require('../../custom/sms-sender');
 class Service {
   constructor(options) {
     this.options = options || {};
@@ -18,6 +19,12 @@ class Service {
   async create(data) {
 
     const saveAllFingerService = this.app.service('save-all-fingers');
+    //const biometricVerificationService = this.app.service('intercept-verificaton');
+    const enrollmentService = this.app.service('enrol-patient');
+    const nacaApiService = this.app.service('naca-api');
+
+
+
     let getSavedFingers = {};
     let fingerTemp = [];
     let savedFinger;
@@ -26,14 +33,24 @@ class Service {
     let base64 = {};
     let finger = [];
     let firstName, lastName;
+    //let bioVerification;
+    let enrol;
 
     try {
+
+      var msg = {
+        message: {},
+        primaryContactPhoneNo: String
+      };
       const objectify = JSON.parse(data.text);
 
       let convertShortKeys = this.convert(objectify);
 
+      convertShortKeys.requestId = objectify.rId;
+
       convertShortKeys.from = data.from;
 
+      let savedData;
 
       const fingerTempKeys = Object.keys(convertShortKeys.data64);
 
@@ -41,7 +58,7 @@ class Service {
       getSavedFingers = await saveAllFingerService.find({ query: { requestId: convertShortKeys.requestId } });
 
       if (getSavedFingers.total !== 0) {
-        const savedData = getSavedFingers.data[0];
+        savedData = getSavedFingers.data[0];
 
         firstName = savedData.firstName;
         lastName = savedData.lastName;
@@ -50,7 +67,7 @@ class Service {
         if (savedFinger !== undefined) {
           fingerCount = savedFinger.length;
           if (fingerCount === 5) {
-            return jsend.success({ fingerLength: fingerCount });
+            return jsend.success('Error 720');
           }
           else {
 
@@ -86,7 +103,56 @@ class Service {
             }
 
             if (addFinger._id !== '') {
-              return jsend.success('Succesfully added fingers and their position!');
+              getSavedFingers = await saveAllFingerService.find({ query: { requestId: convertShortKeys.requestId } });
+              if (getSavedFingers.total !== 0) {
+                savedFinger = getSavedFingers.data[0].finger;
+                fingerCount = savedFinger.length;
+                if (fingerCount === 5) {
+                  try {
+                    for (var k = 0; k < fingerCount; k++) {
+                      base64 = savedFinger[k];
+                      base64.personId = convertShortKeys.personId;
+                      convertShortKeys.data64 = base64;
+                      //console.log('*****************Data64***********************\n', convertShortKeys);
+                      enrol = await enrollmentService.create(convertShortKeys);
+                      if (enrol !== undefined) {
+                        msg.message[k] = enrol;
+                      }
+                    }
+                    // Get fingers and finger positions
+
+                    fingerTemp.forEach((element, i) => {
+                      base64 = {
+                        FingerPosition: ++i,
+                        data64: element
+                      };
+                      finger.push(base64);
+                    });
+
+                    // convertShortKeys.finger = finger;
+                    //console.log('====================hmmmmmmmmmmmmmmm===============\n',getSavedFingers);
+
+                    const enrolFinger = await nacaApiService.create(getSavedFingers.data[0]);
+                    const mobileSessionId = convertShortKeys.requestId;
+
+                    if (enrolFinger.personId !== undefined) {
+                      msg.primaryContactPhoneNo = data.from;
+                      msg.message = {
+                        isUnique: true,
+                        message: enrolFinger.personId,
+                        rId: mobileSessionId
+                      };
+                    }
+                    sms.sendPatientDetail(msg);
+                    return jsend.success(msg);
+
+                  } catch (error) {
+                    return jsend.error(error);
+                  } 
+                } else {
+                  return jsend.success('Succesfully added fingers and their position!');
+                }
+              }
             }
             else {
               return jsend.error('Failed to add fingers');
@@ -108,7 +174,7 @@ class Service {
         convertShortKeys.finger = finger;
         const newFinger = await saveAllFingerService.create(convertShortKeys);
         if (newFinger._id !== '') {
-          return jsend.success(newFinger);
+          return jsend.success('Initial record created!');
         } else {
           return jsend.error('Could not save finger');
         }
