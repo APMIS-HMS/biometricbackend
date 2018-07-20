@@ -34,7 +34,7 @@ class Service {
       form: {
         data64: data.data64.base64,
         FingerPosition: data.data64.FingerPosition,
-        ID: data.data64.base64.personId
+        ID: data.data64.personId
       }
     };
     console.log('\n============OPtions==============\n', option);
