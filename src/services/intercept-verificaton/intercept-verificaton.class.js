@@ -117,8 +117,9 @@ class Service {
                       base64 = savedFinger[k];
                       base64.personId = convertShortKeys.personId;
                       convertShortKeys.data64 = base64;
-                      //console.log('*****************Data64***********************\n', convertShortKeys);
+                      
                       enrol = await enrollmentService.create(convertShortKeys);
+                      console.log('*****************enrole***********************\n', enrol);
                       if (enrol !== undefined) {
                         msg.message[k] = enrol;
                       }
