@@ -33,10 +33,11 @@ class Service {
       method: 'POST',
       form: {
         data64: data.data64.base64,
-        FingerPosition: data.base64.FingerPosition,
+        FingerPosition: data.data64.FingerPosition,
         ID: data.data64.base64.personId
       }
     };
+    console.log('\n============OPtions==============\n', option);
     try {
       console.log('============Got into enrol service==============\n');
       const makeRequest = await request(option);
