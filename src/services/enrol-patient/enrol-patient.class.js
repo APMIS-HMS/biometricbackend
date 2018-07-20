@@ -33,7 +33,7 @@ class Service {
       method: 'POST',
       form: {
         data64: data.data64.base64,
-        FingerPosition: data.data64.base64.FingerPosition,
+        FingerPosition: data.base64.FingerPosition,
         ID: data.data64.base64.personId
       }
     };
