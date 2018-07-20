@@ -45,7 +45,7 @@ class Service {
       const objectify = JSON.parse(data.text);
       console.log('====================46: Objectify!===============\n',objectify);
       let convertShortKeys = this.convert(objectify);
-      console.log('====================48: Objectify!===============\n',convertShortKeys);
+      console.log('====================48: convertShortKeys!===============\n',convertShortKeys);
       convertShortKeys.requestId = objectify.rId;
 
       convertShortKeys.from = data.from;
@@ -56,7 +56,8 @@ class Service {
 
       fingerTemp = Object.keys(convertShortKeys.data64).map(i => convertShortKeys.data64[i]);
       getSavedFingers = await saveAllFingerService.find({ query: { requestId: convertShortKeys.requestId } });
-      console.log('====================59: Objectify!===============\n',getSavedFingers);
+      console.log('====================59: getSavedFingers!===============\n',getSavedFingers);
+      
       if (getSavedFingers.total !== 0) {
         savedData = getSavedFingers.data[0];
 
@@ -67,7 +68,7 @@ class Service {
         if (savedFinger !== undefined) {
           fingerCount = savedFinger.length;
           if (fingerCount === 5) {
-            return jsend.success('Error 720');
+            return jsend.error('Error 720');
           }
           else {
 
@@ -91,7 +92,7 @@ class Service {
             const id = savedData._id;
             let addFinger;
 
-            if (firstName !== undefined || lastName !== undefined) {
+            if (firstName !== null || lastName !== null) {
               // =============Merged Templates======
               savedData.finger = finger;
               console.log('*****************97:savedData***********************\n', savedData);
@@ -100,7 +101,7 @@ class Service {
             else {
               // =============Merged Templates======
               convertShortKeys.finger = finger;
-              console.log('*****************103:convertShortKeys***********************\n', getSavedFingers);
+              console.log('*****************103:convertShortKeys***********************\n', convertShortKeys);
               addFinger = await saveAllFingerService.patch(id, convertShortKeys, {});
             }
 
