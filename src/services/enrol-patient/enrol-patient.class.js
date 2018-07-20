@@ -38,7 +38,9 @@ class Service {
       }
     };
     try {
+      console.log('============Got into enrol service==============\n');
       const makeRequest = await request(option);
+      console.log('============Response from Sidmach==============\n',makeRequest);
       if (makeRequest === undefined) {
         return jsend.error('No data sent');
       } else {
