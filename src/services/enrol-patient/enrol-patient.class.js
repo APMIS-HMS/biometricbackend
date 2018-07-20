@@ -32,9 +32,9 @@ class Service {
       uri: process.env.NACA_ENROLMENT_URL,
       method: 'POST',
       form: {
-        data64: data.data64.data64,
-        FingerPosition: data.data64.FingerPosition,
-        ID: data.data64.personId
+        data64: data.data64.base64,
+        FingerPosition: data.data64.base64.FingerPosition,
+        ID: data.data64.base64.personId
       }
     };
     try {
@@ -53,7 +53,7 @@ class Service {
           };
 
           //sms.sendPatientDetail(msg);
-          return jsend.success(msg);
+          return jsend.error(msg);
         } else {
           let callback ={};
           callback.makeRequest = makeRequest;
