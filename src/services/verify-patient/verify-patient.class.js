@@ -37,19 +37,24 @@ class Service {
     };
 
     try {
+      console.log('============Before verification=============');
       const makeRequest = await request(option);
+      console.log('============After verification=============\n',makeRequest);
       if (JSON.parse(makeRequest).ID === null) {// parse makeRequest to get ID
         msg.message = {
           isUnique: true,
           message: 'Patient does not exist',
           rId: mobileSessionId
         };
+        console.log('============Verification failed=============');
         sms.sendPatientDetail(msg);
         return jsend.error(msg);
       }
       else {
+        console.log('============Verification successful=============');
         const id = JSON.parse(makeRequest.toString());
         const getPerson = await nacaApiService.find({query:{ personId: id.ID } });
+        console.log('============Verification detail pulled from naca-backend=============\n',getPerson);
         const detail = getPerson.data[0];
         if (detail._id !== undefined) {
           msg.message = {
@@ -60,11 +65,14 @@ class Service {
           sms.sendPatientDetail(msg);
           return jsend.success(msg);
         }else{
+          console.log('============Could not find person detail on naca-backend=============\n');
           msg.message = {
             isUnique: true,
             message: 'Patient does not exist on Naca collection!',
             rId: mobileSessionId
           };
+          console.log('============Could not find person detail on naca-backend=============\n',msg);
+          
           sms.sendPatientDetail(msg);
           return jsend.error(msg);
         }

@@ -48,7 +48,7 @@ class Service {
       // Check for verication or enrolment
 
       if (objectify.v === 1) {
-
+        console.log('============Inside verification in biometrics verification=============');
         try {
           convertShortKeys.from = data.from;
           convertShortKeys.rId = mobileSessionId;
