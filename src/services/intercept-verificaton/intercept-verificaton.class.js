@@ -56,7 +56,7 @@ class Service {
 
       fingerTemp = Object.keys(convertShortKeys.data64).map(i => convertShortKeys.data64[i]);
       getSavedFingers = await saveAllFingerService.find({ query: { requestId: convertShortKeys.requestId } });
-
+      console.log('====================59: Objectify!===============\n',getSavedFingers);
       if (getSavedFingers.total !== 0) {
         savedData = getSavedFingers.data[0];
 
@@ -94,17 +94,19 @@ class Service {
             if (firstName !== undefined || lastName !== undefined) {
               // =============Merged Templates======
               savedData.finger = finger;
+              console.log('*****************97:savedData***********************\n', savedData);
               addFinger = await saveAllFingerService.patch(id, savedData, {});
             }
             else {
               // =============Merged Templates======
               convertShortKeys.finger = finger;
+              console.log('*****************103:convertShortKeys***********************\n', getSavedFingers);
               addFinger = await saveAllFingerService.patch(id, convertShortKeys, {});
             }
 
             if (addFinger._id !== '') {
               getSavedFingers = await saveAllFingerService.find({ query: { requestId: convertShortKeys.requestId } });
-              console.log('*****************107:getSavedFingers***********************\n', getSavedFingers);
+              console.log('*****************109:getSavedFingers***********************\n', getSavedFingers);
               if (getSavedFingers.total !== 0) {
                 savedFinger = getSavedFingers.data[0].finger;
                 fingerCount = savedFinger.length;
@@ -131,12 +133,12 @@ class Service {
                     // });
 
                     // convertShortKeys.finger = finger;
-                    console.log('====================134:hmmmmmmmmmmmmmmm===============\n',getSavedFingers);
+                    console.log('====================136:hmmmmmmmmmmmmmmm===============\n',getSavedFingers);
                     firstName = getSavedFingers.data[0].firstName;
                     lastName = getSavedFingers.data[0].lastName;
                     if (firstName !== undefined || lastName !== undefined) {
 
-                      console.log('====================139:Other saved detail found!===============\n',firstName);
+                      console.log('====================131:Other saved detail found!===============\n',firstName);
                       // =============Merged Templates======
                       savedData = getSavedFingers.data[0];
                     }
@@ -167,6 +169,7 @@ class Service {
                     return jsend.error(error);
                   } 
                 } else {
+                  console.log('*****************172:getSavedFingers***********************\n');
                   return jsend.success('Succesfully added fingers and their position!');
                 }
               }
