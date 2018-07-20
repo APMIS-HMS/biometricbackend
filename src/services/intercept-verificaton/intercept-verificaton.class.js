@@ -45,7 +45,7 @@ class Service {
       const objectify = JSON.parse(data.text);
       console.log('====================46: Objectify!===============\n',objectify);
       let convertShortKeys = this.convert(objectify);
-
+      console.log('====================48: Objectify!===============\n',convertShortKeys);
       convertShortKeys.requestId = objectify.rId;
 
       convertShortKeys.from = data.from;
@@ -182,6 +182,7 @@ class Service {
           return jsend.error('No template is saved against this user');
         }
       } else {
+        console.log('====================185: Initial Create!===============\n');
         // Get template sent from the from device
         fingerTemp.forEach((element, i) => {
           var key = fingerTempKeys[i];
@@ -194,6 +195,7 @@ class Service {
         const personId = Math.floor(Math.random() * 90000) + 10000;          
         convertShortKeys.finger = finger;
         convertShortKeys.personId = personId;
+        console.log('====================198: Initial Create!===============\n',convertShortKeys);
         const newFinger = await saveAllFingerService.create(convertShortKeys);
         if (newFinger._id !== '') {
           return jsend.success('Initial record created!');
