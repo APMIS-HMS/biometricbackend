@@ -104,6 +104,7 @@ class Service {
 
             if (addFinger._id !== '') {
               getSavedFingers = await saveAllFingerService.find({ query: { requestId: convertShortKeys.requestId } });
+              console.log('*****************107:getSavedFingers***********************\n', getSavedFingers);
               if (getSavedFingers.total !== 0) {
                 savedFinger = getSavedFingers.data[0].finger;
                 fingerCount = savedFinger.length;
@@ -121,18 +122,33 @@ class Service {
                     }
                     // Get fingers and finger positions
 
-                    fingerTemp.forEach((element, i) => {
-                      base64 = {
-                        FingerPosition: ++i,
-                        data64: element
-                      };
-                      finger.push(base64);
-                    });
+                    // fingerTemp.forEach((element, i) => {
+                    //   base64 = {
+                    //     FingerPosition: ++i,
+                    //     data64: element
+                    //   };
+                    //   finger.push(base64);
+                    // });
 
                     // convertShortKeys.finger = finger;
-                    //console.log('====================hmmmmmmmmmmmmmmm===============\n',getSavedFingers);
+                    console.log('====================134:hmmmmmmmmmmmmmmm===============\n',getSavedFingers);
+                    firstName = getSavedFingers.data[0].firstName;
+                    lastName = getSavedFingers.data[0].lastName;
+                    if (firstName !== undefined || lastName !== undefined) {
 
-                    const enrolFinger = await nacaApiService.create(getSavedFingers.data[0]);
+                      console.log('====================139:Other saved detail found!===============\n',firstName);
+                      // =============Merged Templates======
+                      savedData = getSavedFingers.data[0];
+                    }
+                    else {
+                      // =============Merged Templates======
+                      console.log('====================145:Other saved detail not found!===============\n');
+                      convertShortKeys.finger = getSavedFingers.data[0].finger;
+                      convertShortKeys.personId = getSavedFingers.data[0].personId;
+                      savedData = convertShortKeys;
+                    }
+                    console.log('====================150:detail sending to nacaBackend!===============\n',savedData);
+                    const enrolFinger = await nacaApiService.create(savedData);
                     const mobileSessionId = convertShortKeys.requestId;
 
                     if (enrolFinger.personId !== undefined) {
@@ -143,6 +159,7 @@ class Service {
                         rId: mobileSessionId
                       };
                     }
+                    console.log('====================162:Enrole Successful!===============\n',msg);
                     sms.sendPatientDetail(msg);
                     return jsend.success(msg);
 

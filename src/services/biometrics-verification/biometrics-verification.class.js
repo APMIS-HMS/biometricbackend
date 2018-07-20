@@ -54,7 +54,6 @@ class Service {
           convertShortKeys.rId = mobileSessionId;
           verify = await verifyPatientService.create(convertShortKeys);
           if (verify !== undefined) {
-
             return jsend.success(verify);
           }
 
