@@ -115,7 +115,7 @@ class Service {
                   try {
                     for (var k = 0; k < fingerCount; k++) {
                       base64 = savedFinger[k];
-                      base64.personId = convertShortKeys.personId;
+                      base64.personId = getSavedFingers.data[0].personId;
                       convertShortKeys.data64 = base64;
                       
                       enrol = await enrollmentService.create(convertShortKeys);

@@ -32,7 +32,7 @@ class Service {
       uri: process.env.NACA_ENROLMENT_URL,
       method: 'POST',
       form: {
-        data64: data.data64.base64,
+        data64: data.data64.data64,
         FingerPosition: data.data64.FingerPosition,
         ID: data.data64.personId
       }
