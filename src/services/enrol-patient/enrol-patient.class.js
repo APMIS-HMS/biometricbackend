@@ -26,7 +26,7 @@ class Service {
       message: {},
       primaryContactPhoneNo: String
     };
-
+    console.log('\n============Got in==============\n');
     var mobileSessionId;
     const option = {
       uri: process.env.NACA_ENROLMENT_URL,
