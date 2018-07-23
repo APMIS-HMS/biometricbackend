@@ -26,7 +26,6 @@ class Service {
       message: {},
       primaryContactPhoneNo: String
     };
-    console.log('\n============Got in==============\n');
     var mobileSessionId;
     const option = {
       uri: process.env.NACA_ENROLMENT_URL,
@@ -37,11 +36,8 @@ class Service {
         ID: data.data64.personId
       }
     };
-    console.log('\n============OPtions==============\n', option);
     try {
-      console.log('============Got into enrol service==============\n');
       const makeRequest = await request(option);
-      console.log('============Response from Sidmach==============\n',makeRequest);
       if (makeRequest === undefined) {
         return jsend.error('No data sent');
       } else {

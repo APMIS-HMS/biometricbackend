@@ -43,9 +43,7 @@ class Service {
         primaryContactPhoneNo: String
       };
       const objectify = JSON.parse(data.text);
-      console.log('====================46: Objectify!===============\n',objectify);
       let convertShortKeys = this.convert(objectify);
-      console.log('====================48: convertShortKeys!===============\n',convertShortKeys);
       convertShortKeys.requestId = objectify.rId;
 
       convertShortKeys.from = data.from;
@@ -56,7 +54,6 @@ class Service {
 
       fingerTemp = Object.keys(convertShortKeys.data64).map(i => convertShortKeys.data64[i]);
       getSavedFingers = await saveAllFingerService.find({ query: { requestId: convertShortKeys.requestId } });
-      console.log('====================59: getSavedFingers!===============\n',getSavedFingers);
       
       if (getSavedFingers.total !== 0) {
         savedData = getSavedFingers.data[0];
@@ -95,19 +92,16 @@ class Service {
             if (firstName !== null || lastName !== null) {
               // =============Merged Templates======
               savedData.finger = finger;
-              console.log('*****************97:savedData***********************\n', savedData);
               addFinger = await saveAllFingerService.patch(id, savedData, {});
             }
             else {
               // =============Merged Templates======
               convertShortKeys.finger = finger;
-              console.log('*****************103:convertShortKeys***********************\n', convertShortKeys);
-              addFinger = await saveAllFingerService.patch(id, convertShortKeys, {});
+             addFinger = await saveAllFingerService.patch(id, convertShortKeys, {});
             }
 
             if (addFinger._id !== '') {
               getSavedFingers = await saveAllFingerService.find({ query: { requestId: convertShortKeys.requestId } });
-              console.log('*****************109:getSavedFingers***********************\n', getSavedFingers);
               if (getSavedFingers.total !== 0) {
                 savedFinger = getSavedFingers.data[0].finger;
                 fingerCount = savedFinger.length;
@@ -119,7 +113,6 @@ class Service {
                       convertShortKeys.data64 = base64;
                       
                       enrol = await enrollmentService.create(convertShortKeys);
-                      console.log('*****************enrole***********************\n', enrol);
                       if (enrol !== undefined) {
                         msg.message[k] = enrol;
                       }
@@ -135,23 +128,19 @@ class Service {
                     // });
 
                     // convertShortKeys.finger = finger;
-                    console.log('====================136:hmmmmmmmmmmmmmmm===============\n',getSavedFingers);
                     firstName = getSavedFingers.data[0].firstName;
                     lastName = getSavedFingers.data[0].lastName;
                     if (firstName !== undefined || lastName !== undefined) {
 
-                      console.log('====================131:Other saved detail found!===============\n',firstName);
                       // =============Merged Templates======
                       savedData = getSavedFingers.data[0];
                     }
                     else {
                       // =============Merged Templates======
-                      console.log('====================145:Other saved detail not found!===============\n');
                       convertShortKeys.finger = getSavedFingers.data[0].finger;
                       convertShortKeys.personId = getSavedFingers.data[0].personId;
                       savedData = convertShortKeys;
                     }
-                    console.log('====================150:detail sending to nacaBackend!===============\n',savedData);
                     const enrolFinger = await nacaApiService.create(savedData);
                     const mobileSessionId = convertShortKeys.requestId;
 
@@ -163,7 +152,6 @@ class Service {
                         rId: mobileSessionId
                       };
                     }
-                    console.log('====================162:Enrole Successful!===============\n',msg);
                     sms.sendPatientDetail(msg);
                     return jsend.success(msg);
 
@@ -171,7 +159,6 @@ class Service {
                     return jsend.error(error);
                   } 
                 } else {
-                  console.log('*****************172:getSavedFingers***********************\n');
                   return jsend.success('Succesfully added fingers and their position!');
                 }
               }
@@ -184,7 +171,6 @@ class Service {
           return jsend.error('No template is saved against this user');
         }
       } else {
-        console.log('====================185: Initial Create!===============\n');
         // Get template sent from the from device
         fingerTemp.forEach((element, i) => {
           var key = fingerTempKeys[i];
@@ -197,7 +183,6 @@ class Service {
         const personId = Math.floor(Math.random() * 90000) + 10000;          
         convertShortKeys.finger = finger;
         convertShortKeys.personId = personId;
-        console.log('====================198: Initial Create!===============\n',convertShortKeys);
         const newFinger = await saveAllFingerService.create(convertShortKeys);
         if (newFinger._id !== '') {
           return jsend.success('Initial record created!');

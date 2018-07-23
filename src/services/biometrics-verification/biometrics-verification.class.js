@@ -2,7 +2,6 @@
 const jsend = require('jsend');
 const sms = require('../../custom/sms-sender');
 //const convertReset = require('../../custom/convert');
-const console = require('console');
 
 class Service {
   constructor(options) {
@@ -31,7 +30,6 @@ class Service {
     let getIntercept;
 
     try {
-      console.log();
       var msg = {
         message: {},
         primaryContactPhoneNo: String
@@ -48,7 +46,6 @@ class Service {
       // Check for verication or enrolment
 
       if (objectify.v === 1) {
-        console.log('============Inside verification in biometrics verification=============');
         try {
           convertShortKeys.from = data.from;
           convertShortKeys.rId = mobileSessionId;
@@ -65,8 +62,7 @@ class Service {
 
       } // Enrole Patient...
       else if (objectify.v === 0) {
-        console.log('================hhhhhhhhhhhhhhhh==================');
-        getIntercept = await interceptVerificationService.create(data);
+       getIntercept = await interceptVerificationService.create(data);
         return jsend.success(getIntercept);
       } else {
         return jsend.success('There is no v type');
